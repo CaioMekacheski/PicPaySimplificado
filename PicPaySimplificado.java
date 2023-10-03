@@ -16,7 +16,7 @@ public class PicPaySimplificado
      */
     public static void main(String[] args) 
     {
-        
+        //Usuários
         Usuario comprador1 = new Comprador("Caio", "Mekacheski", "Comprador", "caio@.com", 
                                                                            "1234", 15000, "12345678900");
         
@@ -25,9 +25,8 @@ public class PicPaySimplificado
         
         Usuario lojista1 = new Lojista("Multi Coisas", "Variedades", "Lojista", "multicoisas@.com", 
                                                                            "4321", 150000, "10000000000");
-        
-        List<Usuario> listaUsuarios = new ArrayList<>();
-        
+        //Lista de usuários
+        List<Usuario> listaUsuarios = new ArrayList<>();       
         listaUsuarios.add(lojista1);
         listaUsuarios.add(comprador1);
         listaUsuarios.add(comprador2);
@@ -35,8 +34,8 @@ public class PicPaySimplificado
         Menu menu = new Menu();
         Usuario recebedor = comprador1;
         Usuario pagador;
-        double valor = 500;
-        String login = "", senha = "";
+        double valor;
+        String login, senha;
         
         try
         {
@@ -44,17 +43,20 @@ public class PicPaySimplificado
             login = menu.recebeDado("E-mail: ");
             senha = menu.recebeDado("Senha: ");
             
-            pagador = menu.procuraUsuario(listaUsuarios, login, senha);
-                       
+            pagador = menu.procuraUsuario(listaUsuarios, login, senha);                       
             menu.exibeTelaUsuario(pagador);
             
+            valor = Double.parseDouble(menu.recebeDado("Valor da transferência: R$ "));
+            
             Transacao transac = new Transacao();
-
-            System.out.println("Saldo antes: R$ " + recebedor.getSaldo());
-
-            transac.transferirValor(pagador, recebedor, valor);
-
-            System.out.println("Saldo depois: R$ " + recebedor.getSaldo());
+            
+            boolean transfOK = transac.transferirValor(pagador, recebedor, valor);
+            
+            if(transfOK)
+            {
+                menu.exibeTelaUsuario(pagador);
+                transac.receberValor(pagador, recebedor, valor);
+            }          
         }
         catch(NullPointerException ex)
         {
