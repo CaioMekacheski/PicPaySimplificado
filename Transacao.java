@@ -29,7 +29,9 @@ public class Transacao
         if("Comprador".equals(pagador.getTipo()) && pagador.getSaldo() >= valor && recebedor != null)
         {
             this.descricao = "Transferencia";
-            recebedor.setSaldo(recebedor.getSaldo() + valor);
+            //recebedor.setSaldo(recebedor.getSaldo() + valor);
+            pagador.setSaldo(pagador.getSaldo() - valor);
+            
             System.out.println("Transação realizada com sucesso");
             return true;
         }
@@ -38,5 +40,11 @@ public class Transacao
             System.out.println("Transação não autorizada");
             return false;
         }    
+    }
+    //Atualiza o saldo do recebedor
+    public boolean receberValor(Usuario pagador, Usuario recebedor, double valor)
+    {
+        recebedor.setSaldo(recebedor.getSaldo() + valor);
+        return true;
     }
 }
